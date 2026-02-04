@@ -359,14 +359,7 @@ class LightOnOCR(Model, SupportsGetItem, TorchModelMixin):
                     f"Got {type(images[0]) if images else 'empty list'}"
                 )
         
-        # Try batch processing, fall back to sequential if it fails
-        try:
-            return self._process_batch(images)
-        except Exception as e:
-            logger.warning(
-                f"Batch processing failed ({e}), falling back to sequential processing"
-            )
-            return [self._process_single(img) for img in images]
+        return self._process_batch(images)
     
     def predict(self, image, sample=None):
         """Process a single image with LightOnOCR.
