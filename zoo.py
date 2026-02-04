@@ -38,12 +38,6 @@ def get_device():
     return "cpu"
 
 
-def get_dtype(device: str):
-    """Get the appropriate dtype for the device."""
-    # MPS requires float32, others can use bfloat16
-    if device == "mps":
-        return torch.float32
-    return torch.bfloat16
 
 
 class LightOnOCRGetItem(GetItem):
@@ -110,8 +104,7 @@ class LightOnOCR(Model, SupportsGetItem, TorchModelMixin):
         
         # Device setup
         self.device = get_device()
-        self.dtype = get_dtype(self.device)
-        logger.info(f"Using device: {self.device}, dtype: {self.dtype}")
+        logger.info(f"Using device: {self.device}")
         
         # Load processor and model
         logger.info(f"Loading LightOnOCR from {model_path}")
@@ -122,11 +115,16 @@ class LightOnOCR(Model, SupportsGetItem, TorchModelMixin):
         # Right-padding causes incorrect generation as the model generates left-to-right
         self.processor.tokenizer.padding_side = "left"
         
+        # Use "auto" dtype to let transformers pick the best dtype for the hardware
         self.model = LightOnOcrForConditionalGeneration.from_pretrained(
             model_path,
-            torch_dtype=self.dtype
+            torch_dtype="auto"
         )
         self.model = self.model.to(self.device).eval()
+        
+        # Get the actual dtype from the loaded model for input tensor conversion
+        self.dtype = next(self.model.parameters()).dtype
+        logger.info(f"Model loaded with dtype: {self.dtype}")
         
         logger.info(f"LightOnOCR model loaded successfully (batch_size={self._batch_size})")
 
