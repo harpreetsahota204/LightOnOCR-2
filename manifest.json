@@ -1,0 +1,30 @@
+{
+    "name": "LightOnOCR",
+    "url": "https://github.com/harpreetsahota204/lightonocr",
+    "models": [
+        {
+            "base_name": "lightonai/LightOnOCR-2-1B",
+            "base_filename": "LightOnOCR",
+            "author": "LightOn AI",
+            "license": "Apache-2.0",
+            "source": "https://huggingface.co/lightonai/LightOnOCR-2-1B",
+            "description": "LightOnOCR is a 2.1B-parameter vision-language model optimized for optical character recognition. It uses a chat-based interface to extract text from images with high accuracy across various document types, handwritten text, and scene text.",
+            "tags": [
+                "ocr",
+                "text-extraction",
+                "VLM",
+                "document-understanding"
+            ],
+            "date_added": "2026-02-03",
+            "requirements": {
+                "packages": ["huggingface-hub", "transformers", "torch", "torchvision", "pillow"],
+                "cpu": {
+                    "support": true
+                },
+                "gpu": {
+                    "support": true
+                }
+            }
+        }
+    ]
+}
