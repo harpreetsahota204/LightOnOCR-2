@@ -2,6 +2,8 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harpreetsahota204/LightOnOCR-2/blob/main/lightonocr2_fiftyone_example.ipynb)
 
+![image](lightonocr2.gif)
+
 A [FiftyOne](https://github.com/voxel51/fiftyone) integration for [LightOnOCR-2-1B](https://huggingface.co/lightonai/LightOnOCR-2-1B), a state-of-the-art 1B-parameter end-to-end multilingual vision-language model for document OCR.
 
 ## About LightOnOCR-2
