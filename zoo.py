@@ -118,6 +118,10 @@ class LightOnOCR(Model, SupportsGetItem, TorchModelMixin):
         
         self.processor = LightOnOcrProcessor.from_pretrained(model_path)
         
+        # Set left padding for correct batch generation with decoder-only models
+        # Right-padding causes incorrect generation as the model generates left-to-right
+        self.processor.tokenizer.padding_side = "left"
+        
         self.model = LightOnOcrForConditionalGeneration.from_pretrained(
             model_path,
             torch_dtype=self.dtype
@@ -125,6 +129,16 @@ class LightOnOCR(Model, SupportsGetItem, TorchModelMixin):
         self.model = self.model.to(self.device).eval()
         
         logger.info(f"LightOnOCR model loaded successfully (batch_size={self._batch_size})")
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args):
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        return False
     
     @property
     def media_type(self):
